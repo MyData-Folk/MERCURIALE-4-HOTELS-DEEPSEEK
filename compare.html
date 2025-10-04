@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MERCURIO – Comparateur de Prix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            min-height: 100vh;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            transition: all 0.2s;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a5b4fc;
+        }
+
+        .price-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.2s;
+            background-color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-card-header {
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-card-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="min-h-screen flex flex-col py-8 px-4">
+        <div class="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white rounded-t-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <a href="index.html" class="mr-4 text-white hover:text-blue-200">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h1 class="text-3xl font-bold flex items-center">
+                                <i class="fas fa-chart-line mr-3"></i>
+                                <span>MERCURIO - Comparateur</span>
+                            </h1>
+                            <p class="text-blue-100 mt-1">Comparez les prix entre vos fournisseurs</p>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="flex space-x-2">
+                            <span class="bg-blue-500 text-xs px-3 py-1 rounded-full flex items-center">
+                                <i class="fas fa-database mr-1"></i><span>4 sources</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-6">
+                <!-- Search Section -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-search mr-2 text-indigo-500"></i>Rechercher un produit
+                    </h2>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-barcode text-gray-400"></i>
+                        </div>
+                        <input type="text" id="productCodeInput" placeholder="Entrez un code produit (ex: 12345) ou plusieurs codes séparés par un espace..." autocomplete="off" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Price Comparison Results -->
+                <div id="priceComparisonResults" class="hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-balance-scale mr-2 text-indigo-500"></i>Comparaison des prix
+                        </h2>
+                        <button id="addAllToComparisonBtn" class="btn-success text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                            <i class="fas fa-plus-circle mr-2"></i>Ajouter tout à la liste
+                        </button>
+                    </div>
+                    <div id="priceComparisonCards" class="space-y-6"></div>
+                </div>
+
+                <!-- Comparison List -->
+                <div id="comparisonListSection" class="mt-8 hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <i class="fas fa-list-ul mr-2 text-indigo-500"></i>Liste de comparaison
+                            <span id="comparisonCount" class="ml-2 bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">0</span>
+                        </h2>
+                        <div class="flex space-x-2">
+                            <button id="exportComparisonCsvBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                                <i class="fas fa-file-csv mr-2"></i>Exporter CSV
+                            </button>
+                            <button id="exportComparisonXlsxBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                                <i class="fas fa-file-excel mr-2"></i>Exporter Excel
+                            </button>
+                        </div>
+                    </div>
+                    <div id="comparisonList" class="border border-gray-200 rounded-lg">
+                        <p class="text-center text-gray-500 py-8 px-4">Aucun article ajouté à la liste de comparaison.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 rounded-b-xl">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between text-sm text-gray-500">
+                    <div class="flex items-center justify-center md:justify-start mb-2 md:mb-0">
+                        <i class="fas fa-info-circle mr-2"></i><span>© 2025 MERCURIO – MyData-Folk</span>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-end space-x-4">
+                        <a href="index.html" class="hover:text-indigo-600"><i class="fas fa-home mr-1"></i>Accueil</a>
+                        <a href="commande.html" class="hover:text-indigo-600"><i class="fas fa-shopping-cart mr-1"></i>Préparer commande</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const productCodeInput = document.getElementById('productCodeInput');
+            const priceComparisonResults = document.getElementById('priceComparisonResults');
+            const priceComparisonCards = document.getElementById('priceComparisonCards');
+            const addAllToComparisonBtn = document.getElementById('addAllToComparisonBtn');
+            const comparisonListSection = document.getElementById('comparisonListSection');
+            const comparisonList = document.getElementById('comparisonList');
+            const comparisonCount = document.getElementById('comparisonCount');
+            const exportComparisonCsvBtn = document.getElementById('exportComparisonCsvBtn');
+            const exportComparisonXlsxBtn = document.getElementById('exportComparisonXlsxBtn');
+
+            // State
+            let dataFolkestone = [], dataVendome = [], dataWashington = [], dataLeHavre = [];
+            let comparisonListData = [];
+            let currentSearchResults = [];
+
+            // Load data
+            Promise.all([
+                fetch('data/mercuriale-folkestone.json').then(r => r.json()),
+                fetch('data/mercuriale-vendome.json').then(r => r.json()),
+                fetch('data/mercuriale-washington.json').then(r => r.json()),
+                fetch('data/mercuriale-lehavre.json').then(r => r.json())
+            ])
+            .then(([folkestone, vendome, washington, lehavre]) => {
+                dataFolkestone = folkestone.map(x => ({...x, _source: 'Folkestone'}));
+                dataVendome = vendome.map(x => ({...x, _source: 'Vendôme'}));
+                dataWashington = washington.map(x => ({...x, _source: 'Washington'}));
+                dataLeHavre = lehavre.map(x => ({...x, _source: 'Le Havre'}));
+                
+                // Load comparison list from localStorage
+                const savedComparison = localStorage.getItem('mercurialeComparison');
+                comparisonListData = savedComparison ? JSON.parse(savedComparison) : [];
+                renderComparisonList();
+            })
+            .catch(error => {
+                console.error("Erreur de chargement des fichiers JSON:", error);
+            });
+
+            // Search functionality
+            productCodeInput.addEventListener('input', (e) => {
+                const code = e.target.value.trim();
+                if (!code) {
+                    priceComparisonResults.classList.add('hidden');
+                    return;
+                }
+                
+                findProductByCode(code);
+            });
+
+            function findProductByCode(code) {
+                const allData = [...dataFolkestone, ...dataVendome, ...dataWashington, ...dataLeHavre];
+                const codes = code.includes(' ') ? code.split(' ').filter(c => c.trim()) : [code];
+                
+                currentSearchResults = [];
+                priceComparisonCards.innerHTML = '';
+                
+                codes.forEach(currentCode => {
+                    const products = allData.filter(p => String(p['Code Produit'] ?? '').trim() === currentCode);
+                    if (products.length > 0) {
+                        const productGroup = {
+                            code: currentCode,
+                            name: products[0]['Libellé produit'] || 'Produit inconnu',
+                            brand: products[0]['Marque'] || 'Marque inconnue',
+                            sources: {}
+                        };
+                        
+                        // Get prices from all sources
+                        ['Folkestone', 'Vendôme', 'Washington', 'Le Havre'].forEach(source => {
+                            const product = products.find(p => p._source === source);
+                            productGroup.sources[source] = product ? {
+                                price: parsePriceAsFloat(product.Prix),
+                                priceFormatted: formatPriceFromFloat(parsePriceAsFloat(product.Prix))
+                            } : null;
+                        });
+                        
+                        currentSearchResults.push(productGroup);
+                        
+                        // Create comparison card for this product
+                        const cardHTML = `
+                            <div class="bg-white border border-gray-200 rounded-lg p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">${productGroup.name}</h3>
+                                        <p class="text-sm text-gray-600">Code: ${productGroup.code} | Marque: ${productGroup.brand}</p>
+                                    </div>
+                                    <button class="add-single-to-comparison btn-secondary text-white px-3 py-2 rounded-md text-sm font-medium flex items-center" data-code="${productGroup.code}">
+                                        <i class="fas fa-plus mr-2"></i>Ajouter à la liste
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    ${['Folkestone', 'Vendôme', 'Washington', 'Le Havre'].map(source => {
+                                        const sourceData = productGroup.sources[source];
+                                        return `
+                                            <div class="price-card text-center">
+                                                <div class="price-card-header">${source}</div>
+                                                <div class="price-card-value">${sourceData ? sourceData.priceFormatted : '-'}</div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                        
+                        priceComparisonCards.innerHTML += cardHTML;
+                    }
+                });
+                
+                // Add event listeners to individual add buttons
+                document.querySelectorAll('.add-single-to-comparison').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const code = e.target.closest('button').dataset.code;
+                        addProductToComparisonList(code);
+                    });
+                });
+                
+                if (currentSearchResults.length > 0) {
+                    priceComparisonResults.classList.remove('hidden');
+                    addAllToComparisonBtn.disabled = false;
+                } else {
+                    priceComparisonResults.classList.add('hidden');
+                }
+            }
+
+            // Add all products to comparison list
+            addAllToComparisonBtn.addEventListener('click', () => {
+                currentSearchResults.forEach(product => {
+                    addProductToComparisonList(product.code);
+                });
+                showNotification(`${currentSearchResults.length} produit(s) ajouté(s) à la liste`, 'success');
+            });
+
+            function addProductToComparisonList(code) {
+                // Check if product is already in comparison list
+                if (comparisonListData.some(item => item.code === code)) {
+                    showNotification('Ce produit est déjà dans la liste de comparaison', 'warning');
+                    return;
+                }
+                
+                const allData = [...dataFolkestone, ...dataVendome, ...dataWashington, ...dataLeHavre];
+                const products = allData.filter(p => String(p['Code Produit'] ?? '').trim() === code);
+                
+                if (products.length === 0) return;
+                
+                const productDetails = {
+                    code: code,
+                    name: products[0]['Libellé produit'] || 'Produit inconnu',
+                    brand: products[0]['Marque'] || 'Marque inconnue',
+                    prices: []
+                };
+                
+                // Get prices from all sources
+                ['Folkestone', 'Vendôme', 'Washington', 'Le Havre'].forEach(source => {
+                    const product = products.find(p => p._source === source);
+                    if (product) {
+                        productDetails.prices.push({
+                            source: source,
+                            price: parsePriceAsFloat(product.Prix),
+                            priceFormatted: formatPriceFromFloat(parsePriceAsFloat(product.Prix))
+                        });
+                    }
+                });
+                
+                comparisonListData.push(productDetails);
+                saveComparisonToLocalStorage();
+                renderComparisonList();
+            }
+
+            function renderComparisonList() {
+                if (comparisonListData.length === 0) {
+                    comparisonListSection.classList.add('hidden');
+                    comparisonList.innerHTML = '<p class="text-center text-gray-500 py-8 px-4">Aucun article ajouté à la liste de comparaison.</p>';
+                    return;
+                }
+                
+                comparisonListSection.classList.remove('hidden');
+                comparisonCount.textContent = comparisonListData.length;
+                
+                let tableHTML = `
+                    <div class="custom-scrollbar" style="max-height: 500px; overflow-y: auto;">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100 sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Produit</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Marque</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Folkestone</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Vendôme</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Washington</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Le Havre</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                `;
+                
+                comparisonListData.forEach((item, index) => {
+                    const getPrice = (source) => {
+                        const priceObj = item.prices.find(p => p.source === source);
+                        return priceObj ? priceObj.priceFormatted : '-';
+                    };
+                    
+                    tableHTML += `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.code}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">${item.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.brand}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${getPrice('Folkestone')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${getPrice('Vendôme')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${getPrice('Washington')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${getPrice('Le Havre')}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-red-600 hover:text-red-900 remove-from-comparison" data-index="${index}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += `</tbody></table></div>`;
+                comparisonList.innerHTML = tableHTML;
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-from-comparison').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.currentTarget.dataset.index);
+                        comparisonListData.splice(index, 1);
+                        saveComparisonToLocalStorage();
+                        renderComparisonList();
+                        showNotification('Produit retiré de la liste de comparaison', 'success');
+                    });
+                });
+            }
+
+            // Export functions
+            exportComparisonCsvBtn.addEventListener('click', () => exportComparisonList('csv'));
+            exportComparisonXlsxBtn.addEventListener('click', () => exportComparisonList('xlsx'));
+
+            function exportComparisonList(format) {
+                if (comparisonListData.length === 0) {
+                    showNotification('La liste de comparaison est vide', 'error');
+                    return;
+                }
+                
+                const headers = ['Code', 'Produit', 'Marque', 'Folkestone', 'Vendôme', 'Washington', 'Le Havre'];
+                const rows = comparisonListData.map(item => {
+                    const getPriceValue = (source) => {
+                        const priceObj = item.prices.find(p => p.source === source);
+                        return priceObj ? priceObj.price : '';
+                    };
+                    
+                    return [
+                        item.code,
+                        item.name,
+                        item.brand,
+                        getPriceValue('Folkestone'),
+                        getPriceValue('Vendôme'),
+                        getPriceValue('Washington'),
+                        getPriceValue('Le Havre')
+                    ];
+                });
+                
+                if (format === 'csv') {
+                    downloadAsCsv([headers, ...rows], 'comparaison_prix');
+                } else {
+                    downloadAsExcel([headers, ...rows], 'comparaison_prix');
+                }
+            }
+
+            function downloadAsCsv(data, filename) {
+                const csvContent = data.map(row => 
+                    row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';')
+                ).join('\n');
+                
+                const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+                downloadBlob(blob, `${filename}_${getFormattedDate()}.csv`);
+            }
+
+            function downloadAsExcel(data, filename) {
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // Apply styling for Excel
+                if (ws['!ref']) {
+                    const range = XLSX.utils.decode_range(ws['!ref']);
+                    for (let R = range.s.r; R <= range.e.r; R++) {
+                        for (let C = range.s.c; C <= range.e.c; C++) {
+                            const cell_address = {c: C, r: R};
+                            const cell_ref = XLSX.utils.encode_cell(cell_address);
+                            if (!ws[cell_ref]) continue;
+                            
+                            // Header row styling
+                            if (R === 0) {
+                                ws[cell_ref].s = {
+                                    font: { bold: true, color: { rgb: "FFFFFF" } },
+                                    fill: { fgColor: { rgb: "4F46E5" } },
+                                    alignment: { horizontal: "center" }
+                                };
+                            }
+                            
+                            // Price columns styling (columns D to G)
+                            if (C >= 3 && C <= 6 && R > 0 && ws[cell_ref].v) {
+                                ws[cell_ref].z = '#,##0.00" €"';
+                            }
+                        }
+                    }
+                }
+                
+                // Set column widths
+                ws['!cols'] = [
+                    { wch: 12 }, // Code
+                    { wch: 40 }, // Produit
+                    { wch: 20 }, // Marque
+                    { wch: 12 }, // Folkestone
+                    { wch: 12 }, // Vendôme
+                    { wch: 12 }, // Washington
+                    { wch: 12 }  // Le Havre
+                ];
+                
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Comparaison Prix');
+                XLSX.writeFile(wb, `${filename}_${getFormattedDate()}.xlsx`);
+            }
+
+            // Utility functions
+            function saveComparisonToLocalStorage() {
+                localStorage.setItem('mercurialeComparison', JSON.stringify(comparisonListData));
+            }
+
+            function parsePriceAsFloat(priceStr) {
+                if (!priceStr) return 0;
+                const cleaned = String(priceStr).replace(/[^\d,.]/g, '').replace(',', '.');
+                return parseFloat(cleaned) || 0;
+            }
+
+            function formatPriceFromFloat(price) {
+                return new Intl.NumberFormat('fr-FR', {
+                    style: 'currency',
+                    currency: 'EUR'
+                }).format(price);
+            }
+
+            function getFormattedDate() {
+                return new Date().toISOString().slice(0, 10);
+            }
+
+            function downloadBlob(blob, filename) {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+
+            function showNotification(message, type = 'info') {
+                // Create and show notification
+                const notification = document.createElement('div');
+                const bgColor = type === 'success' ? 'bg-green-500' : 
+                               type === 'error' ? 'bg-red-500' : 
+                               type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+                
+                notification.className = `fixed top-4 right-4 z-50 p-4 rounded-md shadow-md text-white max-w-sm ${bgColor}`;
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} mr-2"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
