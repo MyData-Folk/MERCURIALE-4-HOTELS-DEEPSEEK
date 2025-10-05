@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MERCURIO PRO – Paramètres</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            min-height: 100vh;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a5b4fc;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="min-h-screen flex flex-col py-8 px-4">
+        <div class="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white rounded-t-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <a href="index.html" class="mr-4 text-white hover:text-indigo-200">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h1 class="text-3xl font-bold flex items-center">
+                                <i class="fas fa-cog mr-3"></i>
+                                <span>MERCURIO PRO - Paramètres</span>
+                            </h1>
+                            <p class="text-indigo-100 mt-1">Configurez votre application</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Left Navigation -->
+                <div class="md:col-span-1">
+                    <nav class="space-y-1">
+                        <a href="#general" class="block px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700 font-medium">
+                            <i class="fas fa-sliders-h mr-2"></i>Général
+                        </a>
+                        <a href="#sources" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                            <i class="fas fa-database mr-2"></i>Sources de données
+                        </a>
+                        <a href="#export" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                            <i class="fas fa-file-export mr-2"></i>Export
+                        </a>
+                        <a href="#notifications" class="block px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                            <i class="fas fa-bell mr-2"></i>Notifications
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="md:col-span-3">
+                    <!-- General Settings -->
+                    <section id="general" class="space-y-6">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-sliders-h mr-2 text-indigo-500"></i>Paramètres généraux
+                        </h2>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Devise</label>
+                                <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-10 text-base">
+                                    <option>Euro (€)</option>
+                                    <option>Dollar ($)</option>
+                                    <option>Livre (£)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Langue</label>
+                                <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-10 text-base">
+                                    <option>Français</option>
+                                    <option>Anglais</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Thème sombre</label>
+                                    <p class="text-xs text-gray-500">Activez le mode sombre pour un confort visuel</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Data Sources -->
+                    <section id="sources" class="space-y-6 mt-8">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-database mr-2 text-indigo-500"></i>Sources de données
+                        </h2>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-store mr-3 text-blue-500"></i>
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">Folkestone</h3>
+                                            <p class="text-xs text-gray-500">Mise à jour: 15 min ago</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-store mr-3 text-purple-500"></i>
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">Vendôme</h3>
+                                            <p class="text-xs text-gray-500">Mise à jour: 1h ago</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-store mr-3 text-green-500"></i>
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">Washington</h3>
+                                            <p class="text-xs text-gray-500">Mise à jour: 2h ago</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-store mr-3 text-orange-500"></i>
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">Le Havre</h3>
+                                            <p class="text-xs text-gray-500">Mise à jour: 3h ago</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <button class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
+                                    <i class="fas fa-sync mr-2"></i>Mettre à jour toutes les sources
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Export Settings -->
+                    <section id="export" class="space-y-6 mt-8">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-file-export mr-2 text-indigo-500"></i>Paramètres d'export
+                        </h2>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Format par défaut</label>
+                                <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-10 text-base">
+                                    <option>CSV</option>
+                                    <option>Excel (XLSX)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Inclure l'en-tête</label>
+                                    <p class="text-xs text-gray-500">Ajouter une ligne d'en-tête avec les noms de colonnes</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Inclure la date</label>
+                                    <p class="text-xs text-gray-500">Ajouter la date actuelle dans le nom du fichier</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Notification Settings -->
+                    <section id="notifications" class="space-y-6 mt-8">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-bell mr-2 text-indigo-500"></i>Paramètres de notifications
+                        </h2>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Notifications sonores</label>
+                                    <p class="text-xs text-gray-500">Jouer un son lors des notifications</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Durée d'affichage</label>
+                                    <p class="text-xs text-gray-500">Durée d'affichage des notifications</p>
+                                </div>
+                                <select class="block w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-10 text-base">
+                                    <option>3s</option>
+                                    <option>5s</option>
+                                    <option selected>10s</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Save Button -->
+                    <div class="mt-8 flex justify-end">
+                        <button class="btn-primary text-white px-6 py-3 rounded-md text-sm font-medium">
+                            <i class="fas fa-save mr-2"></i>Enregistrer les modifications
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 rounded-b-xl">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between text-sm text-gray-500">
+                    <div class="flex items-center justify-center md:justify-start mb-2 md:mb-0">
+                        <i class="fas fa-info-circle mr-2"></i><span>© 2025 MERCURIO PRO – MyData-Folk</span>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-end space-x-4">
+                        <a href="index.html" class="hover:text-indigo-600"><i class="fas fa-home mr-1"></i>Accueil</a>
+                        <a href="commande.html" class="hover:text-indigo-600"><i class="fas fa-shopping-cart mr-1"></i>Commande</a>
+                        <a href="compare.html" class="hover:text-indigo-600"><i class="fas fa-chart-line mr-1"></i>Comparer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
